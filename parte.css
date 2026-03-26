@@ -1,0 +1,100 @@
+.topo {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.topo button {
+background: #236b25;
+color: white;
+border: none;
+padding: 10px 15px;
+border-radius: 8px;
+font-size: 16px;
+}
+
+.topo button:hover {
+    background: #45a049;
+}
+
+body {
+    font-family: Arial;
+    background: #1e1e2f;
+    color: black;
+}
+
+/* container */
+.kanban {
+    display: flex; /* deixa lado a lado */
+    gap: 20px;
+    padding: 20px;
+}
+
+.coluna {
+    flex: 1; /* todas as colunas iguais */
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 10px;
+    min-height: 300px;
+}
+
+.card {
+    background: #ffffff;
+    color: rgb(3, 3, 3);
+    padding: 10px; 
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: grab;   /* efeito de arrastar  */
+
+    /* destaque */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #030303;
+}
+
+
+button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* responsivo */
+@media (max-width: 600px) {
+    .kanban {
+        flex-direction: column;
+    }
+}
+
+#todos .card {
+    border-left: 5px solid #0f1011;
+}
+
+#doing .card {
+    border-left: 5px solid #0831e6;
+}
+
+#done .card {
+    border-left: 5px solid #d30808;
+}
+
+.acoes {
+  display: flex;
+  gap: 5px;
+}
+
+.acoes button {
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+.editar {
+  background: #2196F3;
+  color: white;
+}
+
+.excluir {
+  background: #f44336;
+  color: white;
+}
