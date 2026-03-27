@@ -110,3 +110,13 @@ function carregarEstado() {
   }
 }
 carregarEstado();
+
+document.querySelectorAll(".coluna").forEach(coluna => {
+  new Sortable(coluna, {
+    group: "kanban",
+    animation: 150,
+    onEnd: () => {
+      salvarEstado();
+    }
+  });
+});
