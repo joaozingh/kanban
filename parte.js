@@ -24,19 +24,33 @@ function criarCardComTexto(colunaId, texto) {
   document.getElementById(colunaId).appendChild(card);
 }
 
-// eventos do card
+let ultimoToque = 0;
+
 function adicionarEventos(card) {
   const texto = card.querySelector(".texto");
   const btnEditar = card.querySelector(".editar");
   const btnExcluir = card.querySelector(".excluir");
 
-  // editar
+  // editar pelo botão (continua funcionando)
   btnEditar.addEventListener("click", () => {
-    const novoTexto = prompt("Editar:", texto.textContent);
-    if (novoTexto) {
-      texto.textContent = novoTexto;
-      salvarEstado();
+    editarTexto(texto);
+  });
+
+  // duplo clique (PC)
+  card.addEventListener("dblclick", () => {
+    editarTexto(texto);
+  });
+
+  // duplo toque (celular)
+  card.addEventListener("touchend", () => {
+    const agora = new Date().getTime();
+    const diferenca = agora - ultimoToque;
+
+    if (diferenca < 300 && diferenca > 0) {
+      editarTexto(texto);
     }
+
+    ultimoToque = agora;
   });
 
   // excluir
@@ -44,6 +58,15 @@ function adicionarEventos(card) {
     card.remove();
     salvarEstado();
   });
+}
+
+// função separada (melhor prática)
+function editarTexto(texto) {
+  const novoTexto = prompt("Editar:", texto.textContent);
+  if (novoTexto) {
+    texto.textContent = novoTexto;
+    salvarEstado();
+  }
 }
 
 // drag moderno (funciona PC + celular)
