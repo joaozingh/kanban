@@ -1,75 +1,65 @@
-//Drag and Drop: arrastar cards entre colunas 
-let cardArrastado = null;
-
-//criar card
+// criar card
 function criarCard(colunaId) {
-    const texto = prompt("Digite o texto do card:");
-    if (!texto) return;
+  const texto = prompt("Digite o texto do card:");
+  if (!texto) return;
 
-    const card = document.createElement("div"); //cria o card
-    card.className = "card"; // aplica estilo
-    card.textContent = texto;
-    card.draggable = true; //permite arrastar 
-
-    //conteudo do card
-    card.innerHTML = `
-    <span class ="texto">${texto}</span>
-    <div class="acoes">
-     <button class="editar">✏</button>
-     <button class="excluir">❌</button>
-      </div>
-     `
-
-    adicionarEventos(card);
-
-    document.getElementById(colunaId).appendChild(card); //appenChild coloca na coluna
+  criarCardComTexto(colunaId, texto);
+  salvarEstado();
 }
-//eventos do card
+
+// criar card com texto (usado no load)
+function criarCardComTexto(colunaId, texto) {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <span class="texto">${texto}</span>
+    <div class="acoes">
+      <button class="editar">✏</button>
+      <button class="excluir">❌</button>
+    </div>
+  `;
+
+  adicionarEventos(card);
+  document.getElementById(colunaId).appendChild(card);
+}
+
+// eventos do card
 function adicionarEventos(card) {
-    // começar a arrastar 
-    card.addEventListener("dragstart" , (e) => {  //dragstart: quando começar a arrastar guarda o card numa varíavel
-        cardArrastado = card;
-    //suporte a toque touch, mover no celular
-    card.addEventListener("touchstart",() =>{
-        cardArrastado = card;
-});
+  const texto = card.querySelector(".texto");
+  const btnEditar = card.querySelector(".editar");
+  const btnExcluir = card.querySelector(".excluir");
 
-
-    });
- 
-    //editar texto
-    card.addEventListener("dblclick", () => { 
-        const novoTexto = prompt("Editar card:", card.textContent); // editar o texto 
-        if (novoTexto) card.textContent = novoTexto;
-    });
-   
-     const texto = card.querySelector(".texto");
-     const btnEditar = card.querySelector(".editar");
-     const btnExcluir = card.querySelector(".excluir");
-       
-    // excluir
-     btnExcluir.addEventListener("click", () => {
-     card.remove();
+  // editar
+  btnEditar.addEventListener("click", () => {
+    const novoTexto = prompt("Editar:", texto.textContent);
+    if (novoTexto) {
+      texto.textContent = novoTexto;
+      salvarEstado();
+    }
   });
 
+  // excluir
+  btnExcluir.addEventListener("click", () => {
+    card.remove();
+    salvarEstado();
+  });
 }
 
-//Permitir soltar nas colunas
+// drag moderno (funciona PC + celular)
 document.querySelectorAll(".coluna").forEach(coluna => {
   new Sortable(coluna, {
     group: "kanban",
     animation: 150,
     ghostClass: "dragging",
-
-    onEnd: () => {
-      salvarEstado();
-    }
+    onEnd: salvarEstado
   });
 });
 
+// salvar estado
 function salvarEstado() {
   const dados = {};
-  
+
   document.querySelectorAll(".coluna").forEach(coluna => {
     const id = coluna.id;
     dados[id] = [];
@@ -82,6 +72,7 @@ function salvarEstado() {
   localStorage.setItem("kanban", JSON.stringify(dados));
 }
 
+// carregar estado
 function carregarEstado() {
   const dados = JSON.parse(localStorage.getItem("kanban"));
   if (!dados) return;
@@ -92,14 +83,5 @@ function carregarEstado() {
     });
   }
 }
-carregarEstado();
 
-document.querySelectorAll(".coluna").forEach(coluna => {
-  new Sortable(coluna, {
-    group: "kanban",
-    animation: 150,
-    onEnd: () => {
-      salvarEstado();
-    }
-  });
-});
+carregarEstado();
