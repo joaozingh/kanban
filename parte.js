@@ -29,6 +29,12 @@ function adicionarEventos(card) {
     // comçar a arrastar 
     card.addEventListener("dragstart" , (e) => {  //dragstart: quando começar a arrastar guarda o card numa varíavel
         cardArrastado = card;
+    //suporte a toque touch, mover no celular
+    card.addEventListener("touchstart",() =>{
+        cardArrastado = card;
+});
+
+
     });
  
     //editar texto
@@ -50,6 +56,15 @@ function adicionarEventos(card) {
 
 //Permitir soltar nas colunas
 document.querySelectorAll(".coluna").forEach(coluna => {
+ 
+     //touch nas colunas
+     coluna.addEventListener("touchend", () => {
+  if (cardArrastado) {
+    coluna.appendChild(cardArrastado);
+    cardArrastado = null;
+    salvarEstado(); // importante já que você tem localStorage
+  }
+});
 
     coluna.addEventListener("dragover", (e) => {
         e.preventDefault();
@@ -65,6 +80,12 @@ document.querySelectorAll(".coluna").forEach(coluna => {
 
 function salvarEstado() {
   const dados = {};
+
+  coluna.addEventListener("drop", () => {
+    coluna.appendChild(cardArrastado);
+    cardArrastado = null;
+    salvarEstado;
+  })
 
   document.querySelectorAll(".coluna").forEach(coluna => {
     const id = coluna.id;
