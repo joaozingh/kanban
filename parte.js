@@ -26,7 +26,7 @@ function criarCard(colunaId) {
 }
 //eventos do card
 function adicionarEventos(card) {
-    // comçar a arrastar 
+    // começar a arrastar 
     card.addEventListener("dragstart" , (e) => {  //dragstart: quando começar a arrastar guarda o card numa varíavel
         cardArrastado = card;
     //suporte a toque touch, mover no celular
