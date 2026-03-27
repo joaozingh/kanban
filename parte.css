@@ -98,3 +98,7 @@ button {
   background: #f44336;
   color: white;
 }
+
+.dragging {
+  opacity: 0.5;
+}

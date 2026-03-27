@@ -38,8 +38,8 @@ function adicionarEventos(card) {
     });
  
     //editar texto
-    card.addEventListener("dblclick", () => { //dblclick: editar o texto 
-        const novoTexto = prompt("Editar card:", card.textContent);
+    card.addEventListener("dblclick", () => { 
+        const novoTexto = prompt("Editar card:", card.textContent); // editar o texto 
         if (novoTexto) card.textContent = novoTexto;
     });
    
@@ -56,37 +56,20 @@ function adicionarEventos(card) {
 
 //Permitir soltar nas colunas
 document.querySelectorAll(".coluna").forEach(coluna => {
- 
-     //touch nas colunas
-     coluna.addEventListener("touchend", () => {
-  if (cardArrastado) {
-    coluna.appendChild(cardArrastado);
-    cardArrastado = null;
-    salvarEstado(); // importante já que você tem localStorage
-  }
-});
+  new Sortable(coluna, {
+    group: "kanban",
+    animation: 150,
+    ghostClass: "dragging",
 
-    coluna.addEventListener("dragover", (e) => {
-        e.preventDefault();
-    });
-
-    coluna.addEventListener("drop", () => {
-        if (cardArrastado){
-        coluna.appendChild(cardArrastado);
-        cardArrastado = null;
-        }
-    });
+    onEnd: () => {
+      salvarEstado();
+    }
+  });
 });
 
 function salvarEstado() {
   const dados = {};
-
-  coluna.addEventListener("drop", () => {
-    coluna.appendChild(cardArrastado);
-    cardArrastado = null;
-    salvarEstado;
-  })
-
+  
   document.querySelectorAll(".coluna").forEach(coluna => {
     const id = coluna.id;
     dados[id] = [];
